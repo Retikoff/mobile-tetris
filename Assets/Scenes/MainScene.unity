@@ -439,6 +439,7 @@ GameObject:
   - component: {fileID: 803022845}
   - component: {fileID: 803022844}
   - component: {fileID: 803022843}
+  - component: {fileID: 803022846}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -473,6 +474,8 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: 4ad2c3168733ac34d911c1749548c664, type: 2}
   - tetromino: 6
     tile: {fileID: 11400000, guid: 320a6783536bca34aae39035a9340c3f, type: 2}
+  spawnPosition: {x: -1, y: 8, z: 0}
+  boardSize: {x: 10, y: 20}
 --- !u!156049354 &803022844
 Grid:
   m_ObjectHideFlags: 0
@@ -501,6 +504,18 @@ Transform:
   - {fileID: 2007946282}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &803022846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803022842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58719c4b9f6dd5646bf85f7fdccf83a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1188657651
 GameObject:
   m_ObjectHideFlags: 0
