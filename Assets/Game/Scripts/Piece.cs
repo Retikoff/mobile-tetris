@@ -11,6 +11,14 @@ public class Piece : MonoBehaviour
     public Vector3Int[] cells {get; private set;}
     public Vector3Int position {get; private set;}
     public int rotationIndex {get; private set;}
+
+    public float stepDelay = 1f;
+    public float lockDelay = 0.5f;
+
+    private float stepTime;
+    private float lockTime;
+
+
     private InputAction movementAction;
     private Vector2 currentInput;
     private InputAction dropAction;
@@ -31,6 +39,9 @@ public class Piece : MonoBehaviour
         this.position = position;
         this.data = data;
         this.rotationIndex = 0;
+        this.stepTime = Time.time + this.stepDelay;
+        this.lockTime = 0f;
+
 
         if(this.cells == null)
         {
@@ -46,6 +57,9 @@ public class Piece : MonoBehaviour
     public void Update()
     {
         this.board.Clear(this);
+        
+        this.lockTime += Time.deltaTime; //mb in fixed update
+
         currentInput = movementAction.ReadValue<Vector2>();
 
         if (rotateLeft.WasPerformedThisFrame())
@@ -78,8 +92,26 @@ public class Piece : MonoBehaviour
             HardDrop();
         }
 
+        if (Time.time >= this.stepTime)
+        {
+            Step();
+        }
+
         this.board.Set(this);
     }
+
+    private void Step()
+    {
+        this.stepTime = Time.time + this.stepDelay;
+
+        Move(Vector2Int.down);
+
+        if (this.lockTime >= this.lockDelay)
+        {
+            Lock();
+        }
+    }
+
 
     private void HardDrop()
     {
@@ -87,6 +119,16 @@ public class Piece : MonoBehaviour
         {
             continue;
         }
+
+        Lock();
+    }
+
+    private void Lock()
+    {
+        this.board.Set(this);
+        this.board.ClearLines();
+        this.board.SpawnPiece();
+
     }
 
     private bool Move(Vector2Int translation)
@@ -100,6 +142,7 @@ public class Piece : MonoBehaviour
         if (valid)
         {
             this.position = newPosition;
+            this.lockTime = 0f;
         }
 
         return valid;
