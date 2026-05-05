@@ -2,6 +2,7 @@ using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class Piece : MonoBehaviour
@@ -25,6 +26,11 @@ public class Piece : MonoBehaviour
     private InputAction rotateLeft;
     private InputAction rotateRight;
 
+    [SerializeField]
+    private Button dropButton;
+    private int lastFrameDropped = -1;
+
+
     public void Awake()
     {
         movementAction = InputSystem.actions.FindAction("Move");
@@ -41,6 +47,8 @@ public class Piece : MonoBehaviour
         this.rotationIndex = 0;
         this.stepTime = Time.time + this.stepDelay;
         this.lockTime = 0f;
+
+        dropButton.onClick.AddListener(OnHardDrop);
 
 
         if(this.cells == null)
@@ -62,14 +70,14 @@ public class Piece : MonoBehaviour
 
         currentInput = movementAction.ReadValue<Vector2>();
 
-        if (rotateLeft.WasPerformedThisFrame())
+        if (rotateLeft.WasPerformedThisFrame() && !dropAction.WasPerformedThisFrame())
         {
             Rotate(-1);
         }
-        else if (rotateRight.WasPerformedThisFrame())
-        {
-            Rotate(1);   
-        }
+        //else if (rotateRight.WasPerformedThisFrame())
+        //{
+          //  Rotate(1);   
+        //}
 
         if (currentInput.x < 0 && movementAction.WasPerformedThisFrame())
         {
@@ -92,12 +100,27 @@ public class Piece : MonoBehaviour
             HardDrop();
         }
 
+        if (WasHardDroppedThisFrame())
+        {
+            HardDrop();
+        }
+
         if (Time.time >= this.stepTime)
         {
             Step();
         }
 
         this.board.Set(this);
+    }
+
+    private void OnHardDrop()
+    {
+        lastFrameDropped = Time.frameCount;
+    }
+
+    private bool WasHardDroppedThisFrame()
+    {
+        return lastFrameDropped == Time.frameCount;
     }
 
     private void Step()
@@ -113,7 +136,7 @@ public class Piece : MonoBehaviour
     }
 
 
-    private void HardDrop()
+    public void HardDrop()
     {
         while (Move(Vector2Int.down))
         {
