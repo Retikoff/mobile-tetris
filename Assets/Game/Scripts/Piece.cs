@@ -29,6 +29,7 @@ public class Piece : MonoBehaviour
     [SerializeField]
     private Button dropButton;
     private int lastFrameDropped = -1;
+    private int lastFrameRotated = -1;
 
 
     public void Awake()
@@ -100,9 +101,14 @@ public class Piece : MonoBehaviour
             HardDrop();
         }
 
-        if (WasHardDroppedThisFrame())
+        if (WasPerformedThisFrame(lastFrameDropped))
         {
             HardDrop();
+        }
+
+        if (WasPerformedThisFrame(lastFrameRotated))
+        {
+            Rotate(1);
         }
 
         if (Time.time >= this.stepTime)
@@ -113,14 +119,19 @@ public class Piece : MonoBehaviour
         this.board.Set(this);
     }
 
-    private void OnHardDrop()
+    public void OnHardDrop()
     {
         lastFrameDropped = Time.frameCount;
     }
 
-    private bool WasHardDroppedThisFrame()
+    public void OnRotate()
     {
-        return lastFrameDropped == Time.frameCount;
+        lastFrameRotated = Time.frameCount;
+    }
+
+    private bool WasPerformedThisFrame(int lastFrame)
+    {
+        return lastFrame == Time.frameCount;
     }
 
     private void Step()

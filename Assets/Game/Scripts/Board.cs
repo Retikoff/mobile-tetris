@@ -36,6 +36,16 @@ public class Board : MonoBehaviour
         SpawnPiece();
     }
 
+    public void HardDropActivePiece()
+    {
+        activePiece.OnHardDrop();
+    }
+
+    public void RotateActivePiece()
+    {
+        activePiece.OnRotate();
+    }
+
     public void SpawnPiece()
     {
         int random = Random.Range(0, this.tetrominoes.Length);
