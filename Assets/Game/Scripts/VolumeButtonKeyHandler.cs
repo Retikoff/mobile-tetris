@@ -15,7 +15,6 @@ public class VolumeButtonHandler : MonoBehaviour
         if (board != null)
         {
             board.HardDropActivePiece();
-            Debug.Log("HardDropping");
         }
     }
 
@@ -24,7 +23,6 @@ public class VolumeButtonHandler : MonoBehaviour
         if(board != null)
         {
             board.RotateActivePiece();
-            Debug.Log("Rotated");
         }
     }
 }

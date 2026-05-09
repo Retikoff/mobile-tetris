@@ -26,7 +26,7 @@ public class AccelerometerHandler : MonoBehaviour
             float y = ParseFloat(values[1]);
             float z = ParseFloat(values[2]);
 
-            Vector3 rawAccel = new Vector3(-x, y, -z) * sensitivity;
+            Vector3 rawAccel = new Vector3(-x, y, z) * sensitivity;
             smoothedAcceleration = Vector3.Lerp(smoothedAcceleration, rawAccel, smoothing);
 
             currentAcceleration = smoothedAcceleration;

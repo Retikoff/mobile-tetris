@@ -60,7 +60,7 @@ public class Piece : MonoBehaviour
     {
         this.board.Clear(this);
         
-        this.lockTime += Time.deltaTime; //mb in fixed update
+        this.lockTime += Time.deltaTime; 
 
         float time = Time.time;
 
