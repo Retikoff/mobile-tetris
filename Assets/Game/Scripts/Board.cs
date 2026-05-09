@@ -10,6 +10,9 @@ public class Board : MonoBehaviour
     public TetrominoData[] tetrominoes;
     public Vector3Int spawnPosition;
     public Vector2Int boardSize = new Vector2Int(10, 20);
+    [SerializeField]
+    private UIController uIController;
+    private bool isGameOver = false;
     
     public RectInt Bounds
     {
@@ -38,21 +41,26 @@ public class Board : MonoBehaviour
 
     public void HardDropActivePiece()
     {
-        activePiece.OnHardDrop();
+        if (isGameOver) return;
+        activePiece?.OnHardDrop();
     }
 
     public void RotateActivePiece()
     {
-        activePiece.OnRotate();
+        if (isGameOver) return;
+        activePiece?.OnRotate();
     }
 
     public void MoveActivePiece(float input)
     {
-        activePiece.OnMove(input);
+        if (isGameOver) return;
+        activePiece?.OnMove(input);
     }
 
     public void SpawnPiece()
     {
+        if(isGameOver) return;
+
         int random = Random.Range(0, this.tetrominoes.Length);
         TetrominoData data = this.tetrominoes[random];
 
@@ -70,7 +78,15 @@ public class Board : MonoBehaviour
 
     private void GameOver()
     {
+        isGameOver = true;
+        uIController.ShowGameOverScreen();
+    }
+
+    public void ResetGame()
+    {
+        uIController.HideGameOverScreen();
         this.tilemap.ClearAllTiles();
+        isGameOver = false;
     }
     
     public void Set(Piece piece)
