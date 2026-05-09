@@ -46,6 +46,11 @@ public class Board : MonoBehaviour
         activePiece.OnRotate();
     }
 
+    public void MoveActivePiece(float input)
+    {
+        activePiece.OnMove(input);
+    }
+
     public void SpawnPiece()
     {
         int random = Random.Range(0, this.tetrominoes.Length);

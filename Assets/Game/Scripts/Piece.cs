@@ -13,32 +13,25 @@ public class Piece : MonoBehaviour
     public Vector3Int position {get; private set;}
     public int rotationIndex {get; private set;}
 
+    [Header("Настройки управления")]
+    [Range(0.1f, 1f)] public float moveThreshold = 0.6f;   
+    [Range(0.05f, 1f)] public float moveCooldown = 0.25f;
+    private float lastMoveTime;
+
     public float stepDelay = 1f;
     public float lockDelay = 0.5f;
 
     private float stepTime;
     private float lockTime;
 
-
-    private InputAction movementAction;
-    private Vector2 currentInput;
-    private InputAction dropAction;
-    private InputAction rotateLeft;
-    private InputAction rotateRight;
+    private float currentInput = 0.0f;
 
     [SerializeField]
     private Button dropButton;
     private int lastFrameDropped = -1;
     private int lastFrameRotated = -1;
+    private int lastFrameMoved = -1;
 
-
-    public void Awake()
-    {
-        movementAction = InputSystem.actions.FindAction("Move");
-        dropAction = InputSystem.actions.FindAction("Jump");
-        rotateLeft = InputSystem.actions.FindAction("Previous");
-        rotateRight = InputSystem.actions.FindAction("Next");
-    }
 
     public void Initialize(Board board, Vector3Int position, TetrominoData data)
     {
@@ -69,37 +62,22 @@ public class Piece : MonoBehaviour
         
         this.lockTime += Time.deltaTime; //mb in fixed update
 
-        currentInput = movementAction.ReadValue<Vector2>();
+        float time = Time.time;
 
-        if (rotateLeft.WasPerformedThisFrame() && !dropAction.WasPerformedThisFrame())
+        if(time - lastMoveTime > moveCooldown)
         {
-            Rotate(-1);
+            if (currentInput < -moveThreshold && WasPerformedThisFrame(lastFrameMoved))
+            {
+                Move(Vector2Int.left);
+                lastMoveTime = time;
+            }
+            else if (currentInput > moveThreshold && WasPerformedThisFrame(lastFrameMoved))
+            {
+                Move(Vector2Int.right);
+                lastMoveTime = time;
+            }
         }
-        //else if (rotateRight.WasPerformedThisFrame())
-        //{
-          //  Rotate(1);   
-        //}
-
-        if (currentInput.x < 0 && movementAction.WasPerformedThisFrame())
-        {
-            Move(Vector2Int.left);
-            Debug.Log("LEFTTT");
-        }
-        else if (currentInput.x > 0 && movementAction.WasPerformedThisFrame())
-        {
-            Move(Vector2Int.right);
-            Debug.Log("RIGHT");
-        }
-
-        if (currentInput.y < 0 && movementAction.WasPerformedThisFrame())
-        {
-            Move(Vector2Int.down);
-        }
-
-        if (dropAction.WasPerformedThisFrame())
-        {
-            HardDrop();
-        }
+        
 
         if (WasPerformedThisFrame(lastFrameDropped))
         {
@@ -127,6 +105,12 @@ public class Piece : MonoBehaviour
     public void OnRotate()
     {
         lastFrameRotated = Time.frameCount;
+    }
+
+    public void OnMove(float input)
+    {
+        lastFrameMoved = Time.frameCount;
+        currentInput = input;
     }
 
     private bool WasPerformedThisFrame(int lastFrame)

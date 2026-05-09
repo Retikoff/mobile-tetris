@@ -604,9 +604,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58719c4b9f6dd5646bf85f7fdccf83a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
+  moveThreshold: 0.6
+  moveCooldown: 0.05
   stepDelay: 1
   lockDelay: 0.5
   dropButton: {fileID: 949458061}
+--- !u!1 &846835785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 846835787}
+  - component: {fileID: 846835786}
+  m_Layer: 0
+  m_Name: AccelerometerHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &846835786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846835785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1a3995bbc01c9646a402edf61f7c555, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AccelerometerHandler
+  board: {fileID: 803022843}
+  smoothing: 1
+  sensitivity: 0.506
+--- !u!4 &846835787
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846835785}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &949458059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1276,3 +1325,4 @@ SceneRoots:
   - {fileID: 1912705827}
   - {fileID: 1098720619}
   - {fileID: 1731515873}
+  - {fileID: 846835787}
